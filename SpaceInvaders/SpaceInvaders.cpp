@@ -8,23 +8,67 @@
 using namespace std;
 using namespace sf;
 
+#define width 800
+#define height 600
+
 int main()
 {
     //std::cout << "Hello World!\n";
-    RenderWindow window( VideoMode(800,600), "SpaceInvaders" );
+    RenderWindow window( VideoMode(width,height), "SpaceInvaders" );
     window.setFramerateLimit(60);
     Event event;
+    CircleShape circle(5.f);
+    int x, y;
+    x = 400; y = 500;
+    circle.setFillColor(Color(100, 250, 250));
+    circle.setPosition(x, y);
+    //====================
+    //Nie działa - TEXT
+    //====================
+    Font font;
+    Text StartText;
+    StartText.setFont(font);
+    StartText.setCharacterSize(1);
+    StartText.setString("Start");
+    StartText.setFillColor(Color::White);
+    StartText.setPosition(width / 2, height / 2);
+    //==================
+    // Koniec komentarza
+    //==================
     while (true)
-    {
+    {   
+
         window.clear(Color::Black);
         window.pollEvent(event);
-
+        circle.setPosition(x, y);
+        window.draw(circle);
         if ((event.type == Event::Closed) || (Keyboard::isKeyPressed(Keyboard::Escape)))
         {
             window.close();
             break;
         }
 
+      //===================================
+      //Poczatkowa inicjalizacja sterowania
+      //===================================
+        if (Keyboard::isKeyPressed(Keyboard::Left) && x>=10)
+        {
+            x =x-10;
+            
+        }
+        else if (Keyboard::isKeyPressed(Keyboard::Right)&& x<=780)
+        {
+            x = x+10;
+  
+        }
+
+        if (!(Keyboard::isKeyPressed(Keyboard::Enter)))
+        {
+            window.draw(StartText);
+        }
+        //===============================
+        //Koniec inicjalizacji sterowania
+        //===============================
         window.display();
 
     }
