@@ -28,10 +28,11 @@ int main()
     Font font;
     Text StartText;
     StartText.setFont(font);
-    StartText.setCharacterSize(1);
-    StartText.setString("Start");
+    StartText.setCharacterSize(24);
+    StartText.setString("Wcisnij Start aby rozpoczac");
     StartText.setFillColor(Color::White);
     StartText.setPosition(width / 2, height / 2);
+    bool text_flag = true;
     //==================
     // Koniec komentarza
     //==================
@@ -61,14 +62,23 @@ int main()
             x = x+10;
   
         }
-
-        if (!(Keyboard::isKeyPressed(Keyboard::Enter)))
-        {
-            window.draw(StartText);
-        }
         //===============================
         //Koniec inicjalizacji sterowania
         //===============================
+       
+        
+        //================================================
+        //Schemat dzialania przyciskow start w trakcie gry
+        //================================================
+        if (text_flag == true)
+        {
+            window.draw(StartText);
+        }
+
+        if ((Keyboard::isKeyPressed(Keyboard::Enter)) && text_flag == true)
+        {   
+            text_flag = false;      
+        }
         window.display();
 
     }
