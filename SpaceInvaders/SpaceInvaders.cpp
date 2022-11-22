@@ -11,6 +11,13 @@ using namespace sf;
 #define width 800
 #define height 600
 
+#define kolumny 7
+#define wiersze 5
+//obiekty gry
+
+
+
+
 int main()
 {
     //std::cout << "Hello World!\n";
@@ -22,20 +29,71 @@ int main()
     x = 400; y = 500;
     circle.setFillColor(Color(100, 250, 250));
     circle.setPosition(x, y);
-    //====================
-    //Nie działa - TEXT
-    //====================
+    //======================
+    //działa - TEXT STARTOWY
+    //======================
     Font font;
+    font.loadFromFile("fonts/ARCADECLASSIC.ttf");
     Text StartText;
+    Text EnterText;
+    Text StartText2;
     StartText.setFont(font);
+    EnterText.setFont(font);
+    StartText2.setFont(font);
+    EnterText.setCharacterSize(24);
     StartText.setCharacterSize(24);
-    StartText.setString("Wcisnij Start aby rozpoczac");
+    StartText2.setCharacterSize(24);
     StartText.setFillColor(Color::White);
-    StartText.setPosition(width / 2, height / 2);
+    StartText2.setFillColor(Color::White);
+    EnterText.setFillColor(Color::Green);
+    StartText.setPosition((width/2)-150,(height/2));
+    EnterText.setPosition((width / 2)-40, height / 2);
+    StartText2.setPosition((width / 2) + 50, height / 2);
+    StartText.setString("Wcisnij ");
+    EnterText.setString(" enter ");
+    StartText2.setString(" aby rozpoczac");
     bool text_flag = true;
     //==================
     // Koniec komentarza
     //==================
+    //
+    //
+    //
+    Texture AlienTexture;
+    Sprite AlienSprite;
+    Sprite AlienSprite2;
+    AlienTexture.loadFromFile("textures/Alien1.png");
+    AlienSprite.setTexture(AlienTexture);
+    AlienSprite2.setTexture(AlienTexture);
+    AlienSprite.setScale(Vector2f(0.5f,0.5f));
+    AlienSprite2.setScale(Vector2f(0.5f, 0.5f));
+    float alien_width = AlienTexture.getSize().x;
+    float alien_height = AlienTexture.getSize().y;
+    AlienSprite.setPosition(20, 10);
+    AlienSprite2.setPosition(alien_width-5, 10);
+ 
+
+    //
+    //
+    //
+   
+   // float alien_width = Sprite.GetSize().x;
+   // float alien_height = Sprite.GetSize().y;
+  //  Sprite AlienSprite
+
+    struct alien_easy 
+    {
+        int x;
+        int y;
+        int zycia;
+        int szer;
+        int wys;
+        bool istnieje;
+        int kolor;
+
+    }alien1[kolumny][wiersze];
+
+
     while (true)
     {   
 
@@ -43,6 +101,8 @@ int main()
         window.pollEvent(event);
         circle.setPosition(x, y);
         window.draw(circle);
+        window.draw(AlienSprite);
+        window.draw(AlienSprite2);
         if ((event.type == Event::Closed) || (Keyboard::isKeyPressed(Keyboard::Escape)))
         {
             window.close();
@@ -52,12 +112,12 @@ int main()
       //===================================
       //Poczatkowa inicjalizacja sterowania
       //===================================
-        if (Keyboard::isKeyPressed(Keyboard::Left) && x>=10)
+        if (Keyboard::isKeyPressed(Keyboard::Left) && x>=10 && text_flag == false)
         {
             x =x-10;
             
         }
-        else if (Keyboard::isKeyPressed(Keyboard::Right)&& x<=780)
+        else if (Keyboard::isKeyPressed(Keyboard::Right)&& x<=780 && text_flag == false)
         {
             x = x+10;
   
@@ -73,6 +133,8 @@ int main()
         if (text_flag == true)
         {
             window.draw(StartText);
+            window.draw(EnterText);
+            window.draw(StartText2);
         }
 
         if ((Keyboard::isKeyPressed(Keyboard::Enter)) && text_flag == true)
