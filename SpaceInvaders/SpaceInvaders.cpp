@@ -17,6 +17,7 @@ using namespace sf;
 //obiekty gry
 
 vector<vector <Sprite>>enemies;
+vector<CircleShape> projectiles;
 void create_enemies_easy(Sprite AlienSprite,float alien_width,float alien_height)
 {   
     float pozycja_x=20;
@@ -57,9 +58,9 @@ int main()
     CircleShape projectile;
     projectile.setFillColor(Color::White);
     projectile.setRadius(5.f);
-    vector<CircleShape> projectiles;
+    int shootTimer = 0;
   
-    projectiles.push_back(CircleShape(projectile));
+    //projectiles.push_back(CircleShape(projectile));
     
 
     int x, y;
@@ -94,104 +95,128 @@ int main()
     // Koniec komentarza
     //==================
     
-    //==========
-    //Przeciwnik
-    //==========
-    Texture AlienTexture;
-    Sprite AlienSprite;
-    Sprite AlienSprite2;
-    AlienTexture.loadFromFile("textures/Alien1.png");
-    AlienSprite.setTexture(AlienTexture);
-    AlienSprite2.setTexture(AlienTexture);
-    AlienSprite.setScale(Vector2f(0.5f,0.5f));
-    AlienSprite2.setScale(Vector2f(0.5f, 0.5f));
-    float alien_width = (AlienTexture.getSize().x * AlienSprite.getScale().x)+5;
-    float alien_height = AlienTexture.getSize().y * AlienSprite.getScale().y+5;
-    float alien_x = 20;
-    float alien_y = 10;
-    AlienSprite.setPosition(20, 10);
-    AlienSprite2.setPosition(alien_width-5, 10);
-   
-    
-    //=================
-    //Koniec komentarza
-    //=================
-    
-    //=====
-    //Gracz
-    //=====
-    Texture PlayerTexture;
-    Sprite PlayerSprite;
-    PlayerTexture.loadFromFile("textures/Player.png");
-    PlayerSprite.setTexture(PlayerTexture);
-    PlayerSprite.setScale(Vector2f(0.5f, 0.5f));
-    float player_width = PlayerTexture.getSize().x;
-    float player_height = PlayerTexture.getSize().y;
-   
-    //=================
-    //Koniec komentarza
-    //=================
- 
-
-    //
-    //
-    //
-   
-   // float alien_width = Sprite.GetSize().x;
-   // float alien_height = Sprite.GetSize().y;
-  //  Sprite AlienSprite
+//==========
+//Przeciwnik
+//==========
+Texture AlienTexture;
+Sprite AlienSprite;
+Sprite AlienSprite2;
+AlienTexture.loadFromFile("textures/Alien1.png");
+AlienSprite.setTexture(AlienTexture);
+AlienSprite2.setTexture(AlienTexture);
+AlienSprite.setScale(Vector2f(0.5f, 0.5f));
+AlienSprite2.setScale(Vector2f(0.5f, 0.5f));
+float alien_width = (AlienTexture.getSize().x * AlienSprite.getScale().x) + 5;
+float alien_height = AlienTexture.getSize().y * AlienSprite.getScale().y + 5;
+float alien_x = 20;
+float alien_y = 10;
+AlienSprite.setPosition(20, 10);
+AlienSprite2.setPosition(alien_width - 5, 10);
 
 
-    create_enemies_easy(AlienSprite,alien_width,alien_height);
-    //enemies.push_back(Sprite(AlienSprite));
-    while (true)
+//=================
+//Koniec komentarza
+//=================
+
+//=====
+//Gracz
+//=====
+Texture PlayerTexture;
+Sprite PlayerSprite;
+PlayerTexture.loadFromFile("textures/Player.png");
+PlayerSprite.setTexture(PlayerTexture);
+PlayerSprite.setScale(Vector2f(0.5f, 0.5f));
+float player_width = PlayerTexture.getSize().x;
+float player_height = PlayerTexture.getSize().y;
+
+//=================
+//Koniec komentarza
+//=================
+
+
+//
+//
+//
+
+// float alien_width = Sprite.GetSize().x;
+// float alien_height = Sprite.GetSize().y;
+//  Sprite AlienSprite
+
+
+create_enemies_easy(AlienSprite, alien_width, alien_height);
+//enemies.push_back(Sprite(AlienSprite));
+while (true)
+{
+
+    window.clear(Color::Black);
+    window.pollEvent(event);
+    PlayerSprite.setPosition(x, y);
+
+
+    //  window.draw(AlienSprite);
+    //  window.draw(AlienSprite2);
+    if ((event.type == Event::Closed) || (Keyboard::isKeyPressed(Keyboard::Escape)))
     {
+        window.close();
+        break;
+    }
 
-        window.clear(Color::Black);
-        window.pollEvent(event);
-        PlayerSprite.setPosition(x, y);
-     
+    //===================================
+    //Poczatkowa inicjalizacja sterowania
+    //===================================
+    if (Keyboard::isKeyPressed(Keyboard::Left) && x >= 10 && text_flag == false)
+    {
+        x = x - 10;
+
+    }
+    else if (Keyboard::isKeyPressed(Keyboard::Right) && x <= 780 && text_flag == false)
+    {
+        x = x + 10;
+
+    }
+    //===============================
+    //Koniec inicjalizacji sterowania
+    //===============================
+
+
+    //================================================
+    //Schemat dzialania przyciskow start w trakcie gry
+    //================================================
+    if (text_flag == true)
+    {
+        window.draw(StartText);
+        window.draw(EnterText);
+        window.draw(StartText2);
+    }
+
+    if ((Keyboard::isKeyPressed(Keyboard::Enter)) && text_flag == true)
+    {
+        text_flag = false;
+    }
+
+    if (shootTimer < 5)
+    {
+        shootTimer++;
+    }
+
+    if ((Keyboard::isKeyPressed(Keyboard::Space)) && (text_flag == false) && (shootTimer >= 5))
+    {   
+        projectile.setPosition(x+10, y + 5);
+        projectiles.push_back(CircleShape(projectile));
+        shootTimer = 0;
+
+     }
+
+        for (size_t  i= 0; i < projectiles.size(); i++)
+        {
         
-      //  window.draw(AlienSprite);
-      //  window.draw(AlienSprite2);
-        if ((event.type == Event::Closed) || (Keyboard::isKeyPressed(Keyboard::Escape)))
-        {
-            window.close();
-            break;
+           // window.draw(projectiles[i]);
+            projectiles[i].move(0.f, -10.f);
+
+            if (projectiles[i].getPosition().y < 0)
+                projectiles.erase(projectiles.begin()+i);
         }
 
-        //===================================
-        //Poczatkowa inicjalizacja sterowania
-        //===================================
-        if (Keyboard::isKeyPressed(Keyboard::Left) && x >= 10 && text_flag == false)
-        {
-            x = x - 10;
-
-        }
-        else if (Keyboard::isKeyPressed(Keyboard::Right) && x <= 780 && text_flag == false)
-        {
-            x = x + 10;
-
-        }
-        //===============================
-        //Koniec inicjalizacji sterowania
-        //===============================
-
-
-        //================================================
-        //Schemat dzialania przyciskow start w trakcie gry
-        //================================================
-        if (text_flag == true)
-        {
-            window.draw(StartText);
-            window.draw(EnterText);
-            window.draw(StartText2);
-        }
-
-        if ((Keyboard::isKeyPressed(Keyboard::Enter)) && text_flag == true)
-        {
-            text_flag = false;
-        }
 
         for (size_t i = 0; i < enemies.size(); i++)
         {   
@@ -201,10 +226,8 @@ int main()
             }
             
         }
-
-        for (size_t  i= 0; i < projectiles.size(); i++)
+        for (size_t i = 0; i < projectiles.size(); i++)
         {
-        
             window.draw(projectiles[i]);
         }
         window.draw(PlayerSprite);
