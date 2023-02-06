@@ -4,7 +4,9 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <SFML/Audio.hpp>
 #include <vector>
+#include <fstream>
 
 using namespace std; //przesten nazw std z c++
 using namespace sf; //przestrzen nazw sf z c++
@@ -52,6 +54,7 @@ int main()
 {
     RenderWindow window(VideoMode(width, height), "SpaceInvaders"); //parametry okna kolejno szerokosc wysokosc, tytul okna
     window.setFramerateLimit(60); //limit klatek dla okna
+    ofstream outputFile; //definicja obiektu klasy ofstream sluzaca do zapisu wyniku
     Event event;
     CircleShape circle(5.f);
     CircleShape projectile;
@@ -335,10 +338,13 @@ int main()
             Lost.setString("Przegrales Twoj wynik to  " + to_string(points));
             window.draw(HighScore);
             window.draw(Lost);
+            
             window.display();
         }
     }
-
+    outputFile.open("highscore.txt", ios::app);
+    outputFile << to_string(points) << "\n";
+    outputFile.close();
     return 0;
 
 
